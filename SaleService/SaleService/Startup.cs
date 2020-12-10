@@ -26,6 +26,8 @@ namespace SaleService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSingleton<Services.Abstracts.IProductService, Services.Implementations.ProductService>();
+            services.AddSingleton<Services.Abstracts.INotifiedService, Services.Implementations.AzureNorificatinService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

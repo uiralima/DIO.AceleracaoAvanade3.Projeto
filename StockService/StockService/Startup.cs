@@ -25,6 +25,10 @@ namespace StockService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddSingleton<Services.Abstracts.INotifyService, Services.Implementations.AzureServiceBusNotification>();
+            services.AddSingleton<Services.Abstracts.IProductService, Services.Implementations.ProductService>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
