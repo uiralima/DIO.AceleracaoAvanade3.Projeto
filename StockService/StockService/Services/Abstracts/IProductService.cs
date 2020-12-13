@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StockService.Services.Abstracts
 {
-    public interface IProductService
+    public interface IProductService : IModelCreate<Models.Product>, IModelUpdate<Models.Product>, IModelRead<Models.Product>
     {
-        void Create(Models.Product product);
-        void Update(Models.Product product);
-        IEnumerable<Models.Product> Get();
+        Models.OperationResult UpdateStock(int productId, decimal amount);
     }
 }

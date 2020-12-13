@@ -1,38 +1,69 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace StockService.Services.Implementations
 {
     public class ProductService : Abstracts.IProductService
     {
-        private Dictionary<int, Models.Product> _products = new Dictionary<int, Models.Product>();
-
         private const string CREATE_NOTIFICATION_KEY = "produtocriado";
         private const string UPDATE_NOTIFICATION_KEY = "produtoatualizado";
         private readonly Abstracts.INotifyService _notify;
-        public ProductService(Abstracts.INotifyService notify)
+
+        private Repository.Abstracts.IProductRepository _dbContext;
+        public ProductService(Abstracts.INotifyService notify, Repository.Abstracts.IProductRepository dbContext)
         {
             this._notify = notify;
+            this._dbContext = dbContext;
         }
-        public void Create(Models.Product product)
+        private Models.OperationResult ValidateProduct(Models.Product product)
         {
-            //TODO: Regra de negócio aqui
-            product.ID = this._products.Count + 1;
-            this._products.Add(product.ID, product);
+            if (this._dbContext.SameNameOrCode(product.Name, product.Code))
+            {
+                return new Models.OperationResult("Already exists a product with the same name or code");
+            }
+            if (product.Price < 0.0M)
+            {
+                return new Models.OperationResult("Price must be greater or equals 0");
+            }
+            if (product.Stock < 0.0M)
+            {
+                return new Models.OperationResult("Stock must be greater or equals 0");
+            }
+            return new Models.OperationResult();
+        }
+        public Models.OperationResult Create(Models.Product product)
+        {
+            var validateResut = ValidateProduct(product);
+            if (!validateResut.Success)
+            {
+                return validateResut;
+            }
+            this._dbContext.Create(product);
             this._notify.Send(CREATE_NOTIFICATION_KEY, product);
+            return new Models.OperationResult();
         }
-
-        public IEnumerable<Models.Product> Get()
+        public IEnumerable<Models.Product> GetAll()
         {
-            return this._products.Select(f => f.Value);
+            return this._dbContext.GetAll();
         }
-
-        public void Update(Models.Product product)
+        public Models.OperationResult Update(Models.Product product)
         {
-            //TODO: Regra de negócio aqui
-            this._products[product.ID] = product;
+            var validateResut = ValidateProduct(product);
+            if (!validateResut.Success)
+            {
+                return validateResut;
+            }
+            this._dbContext.Update(product);
             this._notify.Send(UPDATE_NOTIFICATION_KEY, product);
+            return new Models.OperationResult();
+        }
+
+        public Models.OperationResult UpdateStock(int productId, decimal amount)
+        {
+            throw new NotImplementedException();
         }
     }
 }

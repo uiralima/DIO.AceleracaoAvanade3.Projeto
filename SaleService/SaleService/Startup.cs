@@ -48,6 +48,7 @@ namespace SaleService
             {
                 endpoints.MapControllers();
             });
+            app.ApplicationServices.GetService<Services.Abstracts.INotifiedService>();
         }
     }
 }

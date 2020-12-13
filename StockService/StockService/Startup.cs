@@ -1,14 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.InMemory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace StockService
 {
@@ -25,10 +21,12 @@ namespace StockService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
-            services.AddSingleton<Services.Abstracts.INotifyService, Services.Implementations.AzureServiceBusNotification>();
-            services.AddSingleton<Services.Abstracts.IProductService, Services.Implementations.ProductService>();
-            
+            services.AddDbContext<Repository.Abstracts.IProductRepository, Repository.Implementations.EntityFrameworkProductRepository>(opt => opt.UseInMemoryDatabase("AvanadeStockService"))
+                .AddScoped<Controllers.Converters.Abstracts.IFactory, Controllers.Converters.Implementations.ConverterFactory>()
+                .AddScoped<Services.Abstracts.Converter.IModelJSONConverter, Services.Implementations.Converter.ModelJSONConverter>() 
+                .AddScoped<Services.Abstracts.Converter.IModelByteConverter, Services.Implementations.Converter.ModelByteConverter>()
+                .AddScoped<Services.Abstracts.INotifyService, Services.Implementations.AzureServiceBusNotification>()
+                .AddScoped<Services.Abstracts.IProductService, Services.Implementations.ProductService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,6 +36,7 @@ namespace StockService
             {
                 app.UseDeveloperExceptionPage();
             }
+
 
             app.UseHttpsRedirection();
 
@@ -49,6 +48,7 @@ namespace StockService
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }

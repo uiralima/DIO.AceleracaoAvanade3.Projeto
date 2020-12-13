@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace StockService.Controllers.Converters
+namespace StockService.Controllers.Converters.Implementations
 {
-    public class ProdutoProductConverter: IConverterToModel<StockService.Models.Product, Models.Produto>
+    public class ProdutoProductConverter: Abstracts.IModelControllerModelConverter<StockService.Models.Product, Models.Produto>
     {
         public Produto FromModel(Product product)
         {
