@@ -8,7 +8,7 @@ namespace StockService.Services.Abstracts.Converter
     public interface IModelByteConverter
     {
         string CotentType { get; }
-        byte[] ToBytes(Models.IModel model);
-        T FromBytes<T>(byte[] data) where T : Models.IModel;
+        byte[] ToBytes(object model);
+        T FromBytes<T>(byte[] data) where T : class;
     }
 }

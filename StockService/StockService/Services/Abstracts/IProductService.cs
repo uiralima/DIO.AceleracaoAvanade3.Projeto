@@ -4,8 +4,11 @@ using System.Threading.Tasks;
 
 namespace StockService.Services.Abstracts
 {
-    public interface IProductService : IModelCreate<Models.Product>, IModelUpdate<Models.Product>, IModelRead<Models.Product>
+    public interface IProductService
     {
-        Models.OperationResult UpdateStock(int productId, decimal amount);
+        Task<Models.OperationResult> UpdateAsync(Models.Product model);
+        Task<IEnumerable<Models.Product>> GetAllAsync();
+        Task<Models.OperationResult> CreateAsync(Models.Product model);
+        Task<Models.OperationResult> UpdateStockAsync(string productId, decimal amount);
     }
 }

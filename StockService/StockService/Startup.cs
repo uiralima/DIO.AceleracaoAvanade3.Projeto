@@ -23,20 +23,23 @@ namespace StockService
             services.AddControllers();
             services.AddDbContext<Repository.Abstracts.IProductRepository, Repository.Implementations.EntityFrameworkProductRepository>(opt => opt.UseInMemoryDatabase("AvanadeStockService"))
                 .AddScoped<Controllers.Converters.Abstracts.IFactory, Controllers.Converters.Implementations.ConverterFactory>()
-                .AddScoped<Services.Abstracts.Converter.IModelJSONConverter, Services.Implementations.Converter.ModelJSONConverter>() 
+                .AddScoped<Services.Abstracts.Converter.IModelJSONConverter, Services.Implementations.Converter.ModelJSONConverter>()
                 .AddScoped<Services.Abstracts.Converter.IModelByteConverter, Services.Implementations.Converter.ModelByteConverter>()
-                .AddScoped<Services.Abstracts.INotifyService, Services.Implementations.AzureServiceBusNotification>()
-                .AddScoped<Services.Abstracts.IProductService, Services.Implementations.ProductService>();
+                .AddScoped<Repository.Abstracts.IUnitOfWork, Repository.Implementations.UnitOfWork>()
+                .AddScoped<Services.Abstracts.INotifyService, Services.Implementations.AzureServiceBusNotifyService>()
+                .AddScoped<Services.Abstracts.IProductService, Services.Implementations.ProductService>()
+                .AddScoped<Services.Abstracts.INotifiedService, Services.Implementations.AzureServiceBusNotifiedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Services.Abstracts.INotifiedService notified)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            notified.StartListen();
 
             app.UseHttpsRedirection();
 

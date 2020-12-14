@@ -7,7 +7,7 @@ namespace StockService.Services.Abstracts.Converter
 {
     public interface IModelJSONConverter
     {
-        string ToJSON(Models.IModel model);
-        T FromJSON<T>(string json) where T : Models.IModel;
+        string ToJSON(object model);
+        T FromJSON<T>(string json) where T : class;
     }
 }

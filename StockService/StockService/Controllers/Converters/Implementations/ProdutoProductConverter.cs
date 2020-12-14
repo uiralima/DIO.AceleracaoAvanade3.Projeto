@@ -13,7 +13,7 @@ namespace StockService.Controllers.Converters.Implementations
         {
             return new Produto()
             {
-                ID = product.ID,
+                Id = product.Id,
                 Codigo = product.Code,
                 Nome = product.Name,
                 Preco = product.Price,
@@ -25,7 +25,7 @@ namespace StockService.Controllers.Converters.Implementations
         {
             return new StockService.Models.Product()
             {
-                ID = product.ID,
+                Id = product.Id,
                 Code = product.Codigo,
                 Name = product.Nome,
                 Price = product.Preco,

@@ -19,14 +19,14 @@ namespace StockService.Services.Implementations.Converter
             TypeNameHandling = TypeNameHandling.None,
             Converters = new JsonConverter[] { new StringEnumConverter() }
         };
-        public T FromJSON<T>(string json) where T : IModel
+        public T FromJSON<T>(string json) where T : class
         {
             if (json == null || json.Length == 0) return default;
             var result = JsonConvert.DeserializeObject<T>(json, JsonSettings);
             return result;
         }
 
-        public string ToJSON(IModel model)
+        public string ToJSON(object model)
         {
             return JsonConvert.SerializeObject(model, Formatting.Indented, JsonSettings);
         }

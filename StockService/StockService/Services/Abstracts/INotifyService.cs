@@ -7,6 +7,6 @@ namespace StockService.Services.Abstracts
 {
     public interface INotifyService
     {
-        public void Send(string niotificationTitle, Models.IModel notificationData);
+        public Task Send(string niotificationTitle, Models.IModel notificationData);
     }
 }

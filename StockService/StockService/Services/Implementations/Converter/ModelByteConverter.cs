@@ -18,12 +18,12 @@ namespace StockService.Services.Implementations.Converter
 
         public string CotentType => "application/json";
 
-        public T FromBytes<T>(byte[] data) where T : IModel
+        public T FromBytes<T>(byte[] data) where T : class
         {
             return this._jsonConverter.FromJSON<T>(Utf8NoBom.GetString(data));
         }
 
-        public byte[] ToBytes(IModel model)
+        public byte[] ToBytes(object model)
         {
             return Utf8NoBom.GetBytes(this._jsonConverter.ToJSON(model));
         }

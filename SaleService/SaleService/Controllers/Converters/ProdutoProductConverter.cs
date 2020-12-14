@@ -11,7 +11,7 @@ namespace SaleService.Controllers.Converters
         {
             return new Models.Produto()
             {
-                ID = product.ID,
+                ID = product.Id,
                 Codigo = product.Code,
                 Nome = product.Name,
                 Preco = product.Price,

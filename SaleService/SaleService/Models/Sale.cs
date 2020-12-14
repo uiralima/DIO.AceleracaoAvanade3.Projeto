@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace StockService.Services.Abstracts
+namespace SaleService.Models
 {
-    public interface INotifiedService
+    public class Sale : IModel
     {
-        void StartListen();
+        List<SaleItem> Items { get; set; }
     }
 }
