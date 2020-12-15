@@ -1,11 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace StockService.Repository.Implementations
+namespace SaleService.Repository.Implementations
 {
     /// <summary>
     /// Iplementa o controle de transações

@@ -5,9 +5,18 @@ using System.Threading.Tasks;
 
 namespace SaleService.Controllers.Models
 {
-    public class ItemVenda : IControllerModel
+    /// <summary>
+    /// Modelo de controler Item de Venda
+    /// </summary>
+    public class ItemVenda : IControllerModel // Deixei o nome em protugês mesmo fugindo do padrão para facilitar a diferenciação do modelo de dados Product
     {
+        /// <summary>
+        /// Id do Produto
+        /// </summary>
         public string IdProduto { get; set; }
-        public decimal Quantidade { get; set; }
+        /// <summary>
+        /// Quantdade vndida
+        /// </summary>
+        public decimal QuantidadeVedida { get; set; }
     }
 }

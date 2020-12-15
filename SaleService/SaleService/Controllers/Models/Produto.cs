@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 
 namespace SaleService.Controllers.Models
 {
-    public class Produto : IControllerModel
+    /// <summary>
+    /// Modelo de controller produto
+    /// </summary>
+    public class Produto : IControllerModel // Deixei o nome em protugês mesmo fugindo do padrão para facilitar a diferenciação do modelo de dados Product
     {
-        public string ID { get; set; }
+        public string Id { get; set; }
         public string Codigo { get; set; }
         public string Nome { get; set; }
         public decimal Preco { get; set; }

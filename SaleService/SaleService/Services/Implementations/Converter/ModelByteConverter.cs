@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace StockService.Services.Implementations.Converter
+namespace SaleService.Services.Implementations.Converter
 {
     /// <summary>
     /// Implementa a conversão entre um objeto e um byte[] serializando com JSON

@@ -1,7 +1,11 @@
 ﻿using Microsoft.Azure.ServiceBus;
+using SaleService.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace StockService.Services.Implementations
+namespace SaleService.Services.Implementations
 {
     /// <summary>
     /// Implementa o envio de notificações ao Azure

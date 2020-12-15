@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 
 namespace SaleService.Controllers.Models
 {
-    public interface IControllerModel
+    /// <summary>
+    /// Contrato para o modelo de dados do controller
+    /// </summary>
+    public interface IControllerModel // Tenho o habito de criar esse interface mesmo que esteja vazia para posteriormnete poder aplicar extensãoes comuns aos modelos
     {
     }
 }

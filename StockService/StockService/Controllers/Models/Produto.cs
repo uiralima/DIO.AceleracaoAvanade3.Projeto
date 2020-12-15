@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace StockService.Controllers.Models
+﻿namespace StockService.Controllers.Models
 {
-    public class Produto : IControllerModel
+    /// <summary>
+    /// Modelo de controller produto
+    /// </summary>
+    public class Produto : IControllerModel // Deixei o nome em protugês mesmo fugindo do padrão para facilitar a diferenciação do modelo de dados Product
     {
         public string Id { get; set; }
         public string Codigo { get; set; }

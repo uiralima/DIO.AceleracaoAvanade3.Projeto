@@ -1,4 +1,4 @@
-﻿namespace StockService.Services.Abstracts.Converter
+﻿namespace SaleService.Services.Abstracts.Converter
 {
     /// <summary>
     /// Contrato para conversores de modelo de dados em JSON

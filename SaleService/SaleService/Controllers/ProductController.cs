@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SaleService.Controllers.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,21 +7,37 @@ using System.Threading.Tasks;
 
 namespace SaleService.Controllers
 {
+    /// <summary>
+    /// Controlador do produto
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly Services.Abstracts.IProductService _productService;
-        public ProductController(Services.Abstracts.IProductService productService, Services.Abstracts.INotifiedService notifiedService)
+        private Services.Abstracts.IProductService _productService;
+        private Converters.Abstracts.IFactory _converterFactory;
+        public ProductController(Services.Abstracts.IProductService productService, Converters.Abstracts.IFactory converterFactory)
         {
             this._productService = productService;
+            this._converterFactory = converterFactory;
         }
 
+        /// <summary>
+        /// Lista todos os produtos em estoque
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public IEnumerable<Models.Produto> Get()
+        public async Task<ActionResult<IEnumerable<Models.Produto>>> GetAll()
         {
-            // O método extendido FromModel vem do Factory de converter que está em StockService.Controllers.Converters
-            return this._productService.Get().Select(f => (Models.Produto)f.FromModel());
+            try
+            {
+                // O método extendido FromModel vem do Factory de converter que está em StockService.Controllers.Converters
+                return Ok((await this._productService.GetAllAsync()).Select(f => this._converterFactory.GeToControllerConverter<SaleService.Models.Product, Models.Produto>().FromModel(f)));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

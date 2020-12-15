@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace StockService.Repository.Abstracts
+namespace SaleService.Repository.Abstracts
 {
     /// <summary>
     /// Contrato básico para o repositório de produtos
     /// </summary>
-    public interface IProductRepository   
+    public interface IProductRepository
     {
         /// <summary>
         /// Inserir um produto
@@ -14,20 +14,17 @@ namespace StockService.Repository.Abstracts
         /// <param name="product"></param>
         /// <returns></returns>
         Task<Models.Product> CreateAsync(Models.Product product);
-
         /// <summary>
         /// Atualizar um produto
         /// </summary>
         /// <param name="product"></param>
         /// <returns></returns>
         Task<Models.Product> UpdateAsync(Models.Product product);
-
         /// <summary>
-        /// Busca a lista de produtos
+        /// Retorna a lista de produtos com estque positivo
         /// </summary>
         /// <returns></returns>
-        Task<IEnumerable<Models.Product>> GetAllAsync();
-
+        Task<IEnumerable<Models.Product>> GetAllWithStockAsync();
         /// <summary>
         /// Busca um produto pelo Id
         /// </summary>
@@ -36,16 +33,7 @@ namespace StockService.Repository.Abstracts
         Task<Models.Product> GetAsync(string id);
 
         /// <summary>
-        /// Verifica se já existe um produto com o mesmo nome ou código
-        /// </summary>
-        /// <param name="name">Nome</param>
-        /// <param name="code">Código</param>
-        /// <param name="id">Id</param>
-        /// <returns>Existe/Não existe</returns>
-        Task<bool> SameNameOrCodeAsync(string name, string code, string id);
-
-        /// <summary>
-        /// AApica as atualizações
+        /// Apica as atualizações
         /// </summary>
         /// <returns></returns>
         Task<int> CommitAsync();

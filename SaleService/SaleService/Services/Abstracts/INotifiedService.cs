@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SaleService.Services.Abstracts
+﻿namespace SaleService.Services.Abstracts
 {
+    /// <summary>
+    /// Contrato para serviços que irão ser notificados pelo pipe
+    /// </summary>
     public interface INotifiedService
     {
+        /// <summary>
+        /// Habilita as notificações
+        /// </summary>
+        void StartListen();
     }
 }

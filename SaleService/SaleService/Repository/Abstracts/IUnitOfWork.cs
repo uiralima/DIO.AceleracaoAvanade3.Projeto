@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace StockService.Repository.Abstracts
+namespace SaleService.Repository.Abstracts
 {
     /// <summary>
     /// Contrato para o controle de transação

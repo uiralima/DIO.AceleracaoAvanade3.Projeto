@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace StockService.Services.Implementations
 {
+    /// <summary>
+    /// Implementa a regra de negócios do produto.
+    /// </summary>
     public class ProductService : Abstracts.IProductService
     {
+        /// <summary>
+        /// Tópicos de notificação
+        /// </summary>
         private const string CREATE_NOTIFICATION_KEY = "produtocriado";
         private const string UPDATE_NOTIFICATION_KEY = "produtoatualizado";
 
@@ -18,18 +23,28 @@ namespace StockService.Services.Implementations
             this._repository = repository;
             this._notify = notify;
         }
+
+        /// <summary>
+        /// Valida e insere um produto e notifica o pipe
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<Models.OperationResult> CreateAsync(Models.Product model)
         {
             try
             {
+                // Valida se o produt está de acordo com as regras e negócio
                 var validateResut = await ValidateProduct(model);
                 if (!validateResut.Success)
                 {
                     return validateResut;
                 }
+                // Insere o produto
                 model = await this._repository.CreateAsync(model);
-                await this._repository.CommitAsync();
+                // Envia a notificação
                 await this._notify.Send(CREATE_NOTIFICATION_KEY, model);
+                // Aplica os dados
+                await this._repository.CommitAsync();
                 return new Models.OperationResult();
             }
             catch(Exception ex)
@@ -39,24 +54,44 @@ namespace StockService.Services.Implementations
             }
         }
 
+        /// <summary>
+        /// Busca a lista de produtos
+        /// </summary>
+        /// <returns></returns>
         public async Task<IEnumerable<Models.Product>> GetAllAsync()
         {
             return await this._repository.GetAllAsync();
         }
 
+            /// <summary>
+            /// Valida e atualiza um produto e envia a notificação
+            /// </summary>
+            /// <param name="model"></param>
+            /// <returns></returns>
         public async Task<Models.OperationResult> UpdateAsync(Models.Product model)
         {
             try
             {
+                // Valida se o produt está de acordo com as regras e negócio
                 var validateResut = await ValidateProduct(model);
                 if (!validateResut.Success)
                 {
                     return validateResut;
                 }
+                // Atualiza um produto caso o mesmo exista
                 model = await this._repository.UpdateAsync(model);
-                await this._repository.CommitAsync();
-                await this._notify.Send(UPDATE_NOTIFICATION_KEY, model);
-                return new Models.OperationResult();
+                if (model != default)
+                {
+                    // Envia a notificação
+                    await this._notify.Send(UPDATE_NOTIFICATION_KEY, model);
+                    // Aplica as alterações
+                    await this._repository.CommitAsync();
+                    return new Models.OperationResult();
+                }
+                else 
+                {
+                    return new Models.OperationResult("Invalid Product!");
+                }
             }
             catch (Exception ex)
             {
@@ -65,6 +100,12 @@ namespace StockService.Services.Implementations
             }
         }
 
+        /// <summary>
+        /// Atualiza o estque de um produto
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
         public async Task<Models.OperationResult> UpdateStockAsync(string productId, decimal amount)
         {
             try
@@ -82,6 +123,11 @@ namespace StockService.Services.Implementations
             }
         }
 
+        /// <summary>
+        /// Verifica se o produto está de acordo com as regras de negócio
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
         private async Task<Models.OperationResult> ValidateProduct(Models.Product product)
         {
             if (await this._repository.SameNameOrCodeAsync(product.Name, product.Code, product.Id))

@@ -1,25 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace StockService.Repository.Abstracts
+namespace SaleService.Repository.Abstracts
 {
     /// <summary>
     /// Classe abstrata de acesso ao banco de dados
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="K"></typeparam>
-    public abstract class BaseRepository<T, K> : DbContext where T : class, Models.IModel  where K : BaseRepository<T, K>
+    public abstract class BaseRepository<T, K> : DbContext where T : class, Models.IIdModel where K : BaseRepository<T, K>
     {
         IUnitOfWork _transaction;
-        public BaseRepository(DbContextOptions<K> options, IUnitOfWork _transaction)
+        public BaseRepository(DbContextOptions<K> options, IUnitOfWork transaction)
             : base(options)
         {
-            this._transaction = _transaction;
+            this._transaction = transaction;
         }
         protected DbSet<T> Items { get; set; }
-
 
         /// <summary>
         /// Insere um dado
@@ -28,7 +26,10 @@ namespace StockService.Repository.Abstracts
         /// <returns></returns>
         public async Task<T> CreateAsync(T item)
         {
-            item.Id = Guid.NewGuid().ToString();
+            if (String.IsNullOrEmpty(item.Id))
+            {
+                item.Id = Guid.NewGuid().ToString();
+            }
             await this.Items.AddAsync(item);
             return item;
         }
@@ -45,19 +46,10 @@ namespace StockService.Repository.Abstracts
                 this.Entry(item).State = EntityState.Modified;
                 return item;
             }
-            else 
+            else
             {
                 return default;
             }
-        }
-
-        /// <summary>
-        /// Busca a lista completa
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IEnumerable<T>> GetAllAsync()
-        {
-            return await Task.FromResult<IEnumerable<T>>(Items.AsNoTracking());
         }
 
         /// <summary>
@@ -79,7 +71,6 @@ namespace StockService.Repository.Abstracts
             return await this._transaction.CommitAsync(this);
         }
 
-
         /// <summary>
         /// Discarta as alterações
         /// </summary>
@@ -89,5 +80,4 @@ namespace StockService.Repository.Abstracts
             await this._transaction.RollbackAsync(this);
         }
     }
-
 }

@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
-namespace StockService.Services.Implementations.Converter
+namespace SaleService.Services.Implementations.Converter
 {
     /// <summary>
     /// Imlementa a serialização/deserualização de um objeto utilizando JSON

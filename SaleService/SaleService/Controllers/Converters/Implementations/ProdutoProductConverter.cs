@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SaleService.Controllers.Converters
+namespace SaleService.Controllers.Converters.Implementations
 {
-    public class ProdutoProductConverter : IConverterToModel<SaleService.Models.Product, Models.Produto>
+    /// <summary>
+    /// Faz a conversão em Produto e product
+    /// </summary>
+    public class ProdutoProductConverter : Abstracts.IModelControllerModelConverter<SaleService.Models.Product, Models.Produto>
     {
         public Models.Produto FromModel(SaleService.Models.Product product)
         {
             return new Models.Produto()
             {
-                ID = product.Id,
+                Id = product.Id,
                 Codigo = product.Code,
                 Nome = product.Name,
                 Preco = product.Price,
@@ -23,7 +26,7 @@ namespace SaleService.Controllers.Converters
         {
             return new SaleService.Models.Product()
             {
-                ID = product.ID,
+                Id = product.Id,
                 Code = product.Codigo,
                 Name = product.Nome,
                 Price = product.Preco,

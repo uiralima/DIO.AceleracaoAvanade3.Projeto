@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StockService.Models
+namespace SaleService.Models
 {
     /// <summary>
     /// Classe que contém as informações de retorno padrão do serviço
@@ -28,7 +28,7 @@ namespace StockService.Models
         /// <summary>
         /// Indica o scesso da operação
         /// </summary>
-        public bool Success { get; private set;  }
+        public bool Success { get; private set; }
         /// <summary>
         /// Mensagem de erro decorrente da operação
         /// </summary>
