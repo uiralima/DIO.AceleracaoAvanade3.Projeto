@@ -83,16 +83,23 @@ namespace SaleService.Services.Implementations
             try
             {
                 var product = await this._repository.GetAsync(item.ProductId);
-                var validateReult = CheckStock(product, item.Amount);
-                if (!validateReult.Success)
+                if (null != product)
                 {
-                    return validateReult;
+                    var validateReult = CheckStock(product, item.Amount);
+                    if (!validateReult.Success)
+                    {
+                        return validateReult;
+                    }
+                    product.Stock -= item.Amount;
+                    await this._repository.UpdateAsync(product);
+                    await this._notify.Send(SOLD_NOTIFICATION_KEY, item);
+                    await this._repository.CommitAsync();
+                    return new Models.OperationResult();
                 }
-                product.Stock -= item.Amount;
-                await this._repository.UpdateAsync(product);
-                await this._notify.Send(SOLD_NOTIFICATION_KEY, item);
-                await this._repository.CommitAsync();
-                return new Models.OperationResult();
+                else
+                {
+                    return new Models.OperationResult("Invalid Product");
+                }
             }
             catch (Exception ex)
             {
